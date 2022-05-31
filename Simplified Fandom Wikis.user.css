@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Simplified Fandom Wikis
 @namespace      V.L
-@version        1.0.0
+@version        1.1.0
 @description    Cut through the distractions to make fandom wikis easier to read.
 @author         Valerio Lyndon
 @preprocessor   stylus
@@ -89,8 +89,8 @@ center() {
 		top: 60px;
 	}
 	
-	/* Hide various junk */
-	#WikiaBar /* overlay popup with social links */
+	// Remove wikia-bar when logged out since it's just populated with social link garbage
+	.WikiaBarWrapper .wikia-bar-anon
 	{
 		display: none;
 	}
@@ -142,10 +142,6 @@ center() {
 			padding: 0 2.5%;
 			flex-direction: row;
 			justify-content: center;
-
-			& .search-modal, .search-modal::before {
-				left: 0;
-			}
 
 			& .global-navigation__nav,
 			& .global-navigation__top,
@@ -221,6 +217,10 @@ center() {
 			& .fandom-community-header__background.fullScreen {
 				width: 100%;
 			}
+		}
+
+		.search-modal, .search-modal::before {
+			left: 0;
 		}
 	}
 	
