@@ -1,0 +1,249 @@
+/* ==UserStyle==
+@name           Simplified Fandom Wikis
+@namespace      V.L
+@version        1.0.0
+@description    Cut through the distractions to make fandom wikis easier to read.
+@author         Valerio Lyndon
+@preprocessor   stylus
+@var select horizontalHeader "De-emphasise the header and make it horizontal while viewing wikis." ["1:Yes*", "0:No"]
+@var select hideClutter "Hide articles/recommendation/suggestions clutter." ["1:Yes*", "0:No"]
+@var select hideCallToAction "Hide calls to action." ["1:Yes", "0:No*"]
+@var select hideAds "Hide ads." ["1:Yes*", "0:No"]
+==/UserStyle== */
+
+center() {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@-moz-document regexp("https?:\\/\\/(?:[a-z]+\\.)?fandom\\.com.*") {
+	/* Hide clutter. */
+	
+	if hideClutter {
+		.render-wiki-recommendations, // bottom recommendations
+		#mixed-content-footer, // bottom suggested posts
+		.search-box ~ .a-list-feed, // main page articles
+		.feed-section__news-stories-topic, // main page articles
+		.feed-section__news-stories-topic + .feed-section__cards // main page articles
+		{
+			display: none;
+		}
+	}
+	
+	if hideAds {
+		.feed-section__ad,
+		.top-ads-container,
+		.bottom-ads-container,
+		#rail-boxad-wrapper,
+		.ad-slot,
+		.ad-slot-placeholder,
+		[id^="incontent_boxad"]
+		{
+			display: none;
+		}
+	}
+	
+	if hideCallToAction {
+		.newsletter, // email signup on main page
+		[data-add-rail-module-page="MediaWiki:DiscordAMA"], // Discord link in sidebar
+		.wds-is-follow-us, // footer social links
+		.global-footer__section-social-links, // footer social links
+		.wds-global-footer__column:last-child, // footer app links
+		.global-footer__content div:last-child // footer app links
+		{
+			display: none;
+		}
+		
+		// footer styles
+		.wds-global-footer__main,
+		.global-footer__content {
+			grid-template-columns: repeat(3,1fr);
+		}
+		.wds-global-footer__header {
+			justify-content: left;
+		}
+	}
+	
+	// Hide right rail when otherwise unhideable (i.e when logged out and full of junk). Displays only when Fandom provides an option to hide.
+	.page__right-rail {
+		width: auto !important;
+	}
+	
+	.right-rail-wrapper {
+		display: none;
+		width: 336px;
+	}
+	
+	.right-rail-toggle ~ .right-rail-wrapper {
+		display: block;
+	}
+	
+	.right-rail-toggle {
+		position: sticky;
+		top: 60px;
+		margin-left: -26px;
+	}
+
+	.sticky-modules-wrapper {
+		top: 60px;
+	}
+	
+	/* Hide various junk */
+	#WikiaBar /* overlay popup with social links */
+	{
+		display: none;
+	}
+	
+	// Image Lightbox improvements
+	
+	.LightboxModal .lightbox-arrows span {
+		center();
+	}
+	
+	.LightboxModal .lightbox-arrows svg {
+		position: relative;
+		--theme-page-text-color: #fff;
+	}
+	
+	.lightbox-arrows .arrow::before {
+		content: "";
+		position: absolute;
+		top: calc(50% - 50px);
+		left: 0;
+		width: 50px;
+		height: 100px;
+		background: rgba(0,0,0,0.7);
+	}
+	.lightbox-arrows .arrow.next::before {
+		border-radius: 100% 0 0 100% / 50% 0 0 50%;
+	}
+	.lightbox-arrows .arrow.previous::before {
+		border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+	}
+	
+	// Remove redundant search on main page
+	
+	.search-box-bottom-wrapper {
+		display: none;
+	}
+}
+
+@-moz-document regexp("https?:\\/\\/(?:[a-z]+\\.)?fandom\\.com\\/wiki\\/.*") {
+	if horizontalHeader {
+		.fandom-sticky-header {
+			left: 0;
+		}
+		
+		.global-navigation {
+			position: static;
+			display: flex;
+			width: 100%;
+			padding: 0 2.5%;
+			flex-direction: row;
+			justify-content: center;
+
+			& .search-modal, .search-modal::before {
+				left: 0;
+			}
+
+			& .global-navigation__nav,
+			& .global-navigation__top,
+			& .global-navigation__bottom,
+			& .global-navigation__links {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			& .global-navigation__logo {
+				display: flex;
+				flex-direction: column;
+			}
+
+			& .global-navigation__link {
+				margin-left: 12px;
+			}
+
+			& .global-navigation__link[href$="CreateNewWiki"] .global-navigation__label {
+				white-space: nowrap;
+				max-width: initial;
+			}
+			& .global-navigation__link[href$="CreateNewWiki"] .global-navigation__label::after {
+				content: none;
+			}
+
+			& div:not(.notifications) {
+				& > .wds-dropdown.wds-open-to-right {
+					& .wds-dropdown__content {
+						position: absolute;
+						top: 100%;
+						left: 50%;
+						bottom: auto;
+						transform: translateX(-50%);
+					}
+					&::before,
+					&::after {
+						top: auto;
+						bottom: 0;
+						left: calc(50% + 2px);
+						transform: rotate(90deg);
+						transform-origin: top left;
+					}
+				}
+			}
+
+			& .notifications .wds-dropdown.is-attached-to-bottom .wds-dropdown__content {
+				z-index: 999;
+				left: auto;
+				right: 0;
+			}
+			& .notifications .wds-dropdown::before,
+			& .notifications .wds-dropdown::after {
+				content: none;
+			}
+
+			& .global-navigation__bottom {
+				position: static;
+			}
+
+			// Hide redundant search
+
+			& .global-navigation__search {
+				display: none;
+			}
+		}
+		
+		.main-container {
+			margin-left: 0;
+			width: 100%;
+			
+			& .fandom-community-header__background.fullScreen {
+				width: 100%;
+			}
+		}
+	}
+	
+	// Wiki-specific tweaks
+	
+}
+	
+	@-moz-document regexp("https?:\\/\\/minecraft\\.fandom\\.com\\/wiki\\/.*")
+		// Improved dark mode
+		
+		.theme-fandomdesktop-dark {
+			& .alternaterows tr:nth-child(2n),
+			& .infobox-rows tr:nth-child(2n) {
+				background-color: #16191d;
+			}
+			
+			&.ooui-theme-fandomooui .wikitable > tr > th,
+			&.ooui-theme-fandomooui .wikitable > * > tr > th {
+				background-color: #292323;
+			}
+		}
+		
+		
+		
+		
+		
