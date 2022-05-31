@@ -1,4 +1,4 @@
-# Simplified-Fandom-Wikis
+# Simplified Fandom Wikis
 
 Cut through the distractions to make fandom wikis easier to read.
 
